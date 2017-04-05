@@ -4,13 +4,6 @@ import xml.etree.ElementTree as ET
 import os
 import sys
 from xml.etree.ElementTree import Element as Elem
-# def createChilds(parent,t_childs):  # parentは親ノード、lst_childsは子ノードのタプル。
-#     for child in t_childs:
-#         ET.SubElement(parent,child)
-        
-
-
-
 def main():
     src = os.path.join(os.path.dirname(sys.path[0]),"src")  # srcフォルダの絶対パスを取得。
     #Creation of ProtocolHandler.xcu
