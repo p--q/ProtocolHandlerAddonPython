@@ -1,0 +1,7 @@
+eclipse.preferences.version=1
+encoding//tools/settings.py=utf-8
+encoding//tools/step1createRDB.py=utf-8
+encoding//tools/step2createXCU.py=utf-8
+encoding//tools/step3createManifest.py=utf-8
+encoding//tools/step4createOXT.py=utf-8
+encoding//tools/step5depoyOXT.py=utf-8
