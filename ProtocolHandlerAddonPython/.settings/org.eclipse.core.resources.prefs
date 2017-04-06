@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/ProtocolHandlerAddon.py=utf-8
 encoding//tools/settings.py=utf-8
 encoding//tools/step1createRDB.py=utf-8
 encoding//tools/step2createXCU.py=utf-8

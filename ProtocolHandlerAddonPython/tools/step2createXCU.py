@@ -3,7 +3,6 @@
 import xml.etree.ElementTree as ET
 import os
 import sys
-# from xml.etree.ElementTree import Element as Elem
 class Elem(ET.Element):
     def __init__(self, tag, attrib={}, text=None, **extra):  
         attrib.update(extra)       
