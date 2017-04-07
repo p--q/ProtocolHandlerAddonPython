@@ -1,7 +1,7 @@
 #!/opt/libreoffice5.2/program/python
 # -*- coding: utf-8 -*-
 from settings import BASE_NAME
-from createManifest import createBK
+from step3createManifest import createBK
 import subprocess
 import glob
 import os
@@ -20,15 +20,24 @@ def main():
     rdbs = glob.glob("*.rdb")  # rdbファイルの絶対パスを取得。
     comps = glob.glob("*.components")  # .componentsファイルの絶対パスを取得。 
     pys = glob.glob("*.py")  # Python UNO Componentファイルの絶対パスを取得。 
-    files = mani,rdbs,comps,pys  # glob.globで取得したファイルリストのタプル。
-    if not all(files):  # いずれかのファイルが欠けているとき。
-        names = "manifext.xml","*.rdb","*.components","*.py"
-        for i,f in enumerate(files):  # 必須ファイルの存在確認。
-            if not f:  # ファイルが欠けている時
-                print(names[i] + "does not exist.")
-                sys.exit()
+    xcus = glob.glob("*.xcu")  # xcuファイルを取得。
+    
+#     files = [mani,rdbs,comps,pys,xcus]  # glob.globで取得したファイルリストのタプル。
+#     if not all(files):  # いずれかのファイルが欠けているとき。
+#         names = "manifext.xml","*.rdb","*.components","*.py"
+#         for i,f in enumerate(files):  # 必須ファイルの存在確認。
+#             if not f:  # ファイルが欠けている時
+#                 print(names[i] + "does not exist.")
+#                 sys.exit()
+
+    lst_files = list()
+    for lst in mani,rdbs,comps,pys,xcus:
+        if lst:
+            lst_files.extend(lst)
+
     args = ["zip",oxt]
-    args.extend(chain.from_iterable(files))
+#     args.extend(chain.from_iterable(files))
+    args.extend(lst_files)
     subprocess.run(args)  # 必須ファイルをoxtファイルに収納。
     if os.path.exists("pythonpath"):  # pythonpathフォルダがあるとき
         exts = "py","mo"  # oxtファイルに含めるファイルの拡張子のタプル。
