@@ -5,42 +5,47 @@ import os
 import sys
 from step1settings import LST
 from step2createRDB import src_path
-class Elem(ET.Element):  # textも引数で設定できるようにするクラス。
-    def __init__(self, tag, attrib={}, text=None, **extra):  
-        attrib.update(extra)       
-        super().__init__(tag, attrib)
-        if text:
-            self._text(text)
+class Elem(ET.Element):  # textノードも引数で設定できるようにするクラス。
+    def __init__(self, tag, attrib={},**kwargs):  
+        if "text" in kwargs:
+            self._text(kwargs["text"])
+            del kwargs["text"]    
+        super().__init__(tag, kwargs)
     def _text(self,text):
         self.text = text
 class MenuItem():
-    def __init__(self,dic,mdic):
-        self.dic = dic
-        self.mdic = mdic
-    def create(self):
-        lst_nd = list()
-        for key,val in self.mdic.items():
+    def __init__(self,menu,dic):
+        self.dic = dic  # (Python UNO Componentファイル名、実装サービス名、サービス名,プロトコール名)の辞書のリスト。
+        self.nd = Elem("node",{'oor:name':menu})
+    def createNodes(self,xdic):
+        for key,val in xdic.items():
             if key == "Title":
-                snd = Elem("prop",{"oor:name":key,"oor:type":"xs:string"})
+                nd = Elem("prop",{"oor:name":key,"oor:type":"xs:string"})
                 for lang,txt in val.items():
-                    snd.append(Elem("value",{"xml:lang":lang}),text=txt)
-                lst_nd.append(snd)
+                    nd.append(Elem("value",{"xml:lang":lang}),text=txt)
+                self.nd.append(nd)
             elif key == "Submenu":
-                lst_nd.append(self.subMenu(key, val))
+                self.nd.append(self.subMenu(key, val))
             else:
-                lst_nd.append(Elem("value",text=val))
-        return lst_nd          
-    def subMenu(self,key,val):
-        '''
-        
-        :param key:
-        :param val:
-        '''
-        
+                self.nd.append(Elem("value",text=val)) 
+        return self.nd        
+    def subMenu(self,key,val):  # keyはoor:nameの値、valはそのvalueノードのテキストノードの値。
         pass
-        
-        
-        
+class AddonMenu(MenuItem):
+    def __init__(self,dic):
+        super().__init__("AddonMenu",dic)
+        self.createMenuItem({"Title":{"en-US":"Add-On example"},"Context":"com.sun.star.text.TextDocument","Submenu":["m1","m2"]})
+
+    def createMenuItem(self,**kwargs):
+        self.nd.append(Elem("node",{'oor:name':self.dic["IMPLE_NAME"] + ".function","oor:op":"replace"}))
+        super().createNodes(kwargs)
+        sa
+    
+    def subMenu(self,key,val):
+        pass
+
+
+
 def createOfficeMenuBarSubMenu(dic,key,val):
     snd = Elem("node",{"oor:name":key,"oor:type":"xs:string"})
     ssnd = Elem("node",{"oor:name":val[0],"oor:op":"replace"})
