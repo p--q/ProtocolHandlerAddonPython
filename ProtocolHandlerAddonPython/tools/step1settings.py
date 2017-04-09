@@ -8,3 +8,13 @@ BASE_NAME = "ProtocolHandlerAddonPython"  # これがrdbファイル名、.compo
 LST = [
     {"PYTHON_UNO_Component":"ProtocolHandlerAddon.py","IMPLE_NAME":'ProtocolHandlerAddonImpl',"SERVICE_NAME":'com.sun.star.frame.ProtocolHandler',"HANDLED_PROTOCOL":"org.openoffice.Office.addon.example" }
        ]  # (Python UNO Componentファイル名、実装サービス名、サービス名,プロトコール名)の辞書のリスト。
+
+import os
+import sys
+src_path = os.path.join(os.path.dirname(sys.path[0]),"src")  # srcフォルダの絶対パスを取得。
+def createBK(path):  # 引数のファイルがあれば拡張子bkを付ける。
+    if os.path.exists(path):  #ファイルがすでに存在するとき。
+        bk = path + ".bk"  # バックアップファイル名の取得。
+        if os.path.exists(bk): os.remove(bk)  # Windowsの場合は上書きできないので削除が必要。
+        os.rename(path, bk)  # 既存のファイルを拡張子bkでバックアップ。 
+        print("The previous version of " + os.path.basename(path) + " file has been renamed for backup.")  

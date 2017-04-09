@@ -1,7 +1,6 @@
 #!/opt/libreoffice5.2/program/python
 # -*- coding: utf-8 -*-
-from settings import BASE_NAME
-from step3createManifest import createBK
+from step1settings import BASE_NAME,createBK,src_path
 import subprocess
 import glob
 import os
@@ -9,45 +8,36 @@ import shutil
 import sys
 from itertools import chain
 def main():
-    pro = src = os.path.dirname(sys.path[0])  # プロジェクトフォルダの絶対パスを取得。
-    oxt = os.path.join(pro,BASE_NAME + ".oxt")  # 作成するoxtファイルの絶対パスを取得。
+    oxtf = os.path.join(src_path,"..","oxt")  # oxtフォルダの絶対パスの取得。
+    if not os.path.exists(oxtf):  # oxtフォルダがなければ作成する。
+        os.mkdir(oxtf)
+    oxt = os.path.join(oxtf,BASE_NAME + ".oxt") # 作成するoxtファイルの絶対パスを取得。
     createBK(oxt)  # すでにあるoxtファイルをbkに改名。
-    os.chdir(os.path.join(pro,"src"))  # 作業ディレクトリをsrcに変更。
+    os.chdir(src_path)  # srcフォルダに移動。
     if not shutil.which("zip"):  # zipコマンドの有効を確認。
         print("The zip command must be valid for execution.")
         sys.exit()
-    mani = glob.glob(os.path.join("META-INF","manifest.xml"))  # manifest.xmlの絶対パスを取得。
-    rdbs = glob.glob("*.rdb")  # rdbファイルの絶対パスを取得。
-    comps = glob.glob("*.components")  # .componentsファイルの絶対パスを取得。 
-    pys = glob.glob("*.py")  # Python UNO Componentファイルの絶対パスを取得。 
+    mani = glob.glob(os.path.join("META-INF","manifest.xml"))  # manifest.xmlを取得。
+    rdbs = glob.glob("*.rdb")  # rdbファイルを取得。
+    comps = glob.glob("*.components")  # .componentsファイルを取得。 
+    pys = glob.glob("*.py")  # Python UNO Componentファイルを取得。 
     xcus = glob.glob("*.xcu")  # xcuファイルを取得。
-    
-#     files = [mani,rdbs,comps,pys,xcus]  # glob.globで取得したファイルリストのタプル。
-#     if not all(files):  # いずれかのファイルが欠けているとき。
-#         names = "manifext.xml","*.rdb","*.components","*.py"
-#         for i,f in enumerate(files):  # 必須ファイルの存在確認。
-#             if not f:  # ファイルが欠けている時
-#                 print(names[i] + "does not exist.")
-#                 sys.exit()
-
     lst_files = list()
-    for lst in mani,rdbs,comps,pys,xcus:
+    for lst in mani,rdbs,comps,pys,xcus:  # oxtファイルにいれるファイルリストを取得。
         if lst:
             lst_files.extend(lst)
-
     args = ["zip",oxt]
-#     args.extend(chain.from_iterable(files))
     args.extend(lst_files)
     subprocess.run(args)  # 必須ファイルをoxtファイルに収納。
     if os.path.exists("pythonpath"):  # pythonpathフォルダがあるとき
         exts = "py","mo"  # oxtファイルに含めるファイルの拡張子のタプル。
-        files = []  # ファイルリストの初期化。
+        lst_files = list()  # ファイルリストの初期化。
         for ext in exts:
             g = glob.glob(os.path.join("pythonpath","**","*." + ext),recursive=True)  # 指定拡張子のファイルのパスを取得。
-            if g: files.extend(g)  # 指定拡張子のファイルがあるのならリストに追加。
+            if g: lst_files.extend(g)  # 指定拡張子のファイルがあるのならリストに追加。
         if not g:
             args = ["zip","-u",oxt]
-            args.extend(files)
+            args.extend(lst_files)
             subprocess.run(args)  # pythonpathフォルダをoxtファイルに収納。
 if __name__ == "__main__":
     sys.exit(main())

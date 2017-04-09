@@ -4,9 +4,9 @@ import sys
 import os
 import glob
 import subprocess
-from step1settings import BASE_NAME
+from step1settings import BASE_NAME,src_path
 unordb_file = BASE_NAME + ".uno.rdb"
-src_path = os.path.join(os.path.dirname(sys.path[0]),"src")  # srcフォルダの絶対パスを取得。
+# src_path = os.path.join(os.path.dirname(sys.path[0]),"src")  # srcフォルダの絶対パスを取得。
 def main():
     # 各々のパスの取得。
     uno_path = os.environ["UNO_PATH"]  # programフォルダへの絶対パスを取得。
