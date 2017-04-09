@@ -13,6 +13,7 @@ if oxt:
     unopkg = os.path.join(uno_path,"program","unopkg") 
     args = [unopkg,"add","-f",oxt_path]
     subprocess.run(args) 
-    print(oxt_path + " has been deployed to " + os.path.basename(uno_path) + ".")
+    subprocess.run([unopkg,"gui"])
+    print("If the error message is not, " + oxt_path + " deployment to " + os.path.basename(uno_path) + " has been successful.")
 else:
     print("There is no oxt file.")

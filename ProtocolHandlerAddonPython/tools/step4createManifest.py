@@ -31,9 +31,6 @@ def createManifestFile(component_file,unordb_file):  # manifext.xmlファイル�
         rt = Elem("manifest:manifest",{"xmlns:manifest":"http://openoffice.org/2001/manifest"})
         for xcu in glob.iglob("*.xcu"):
             rt.append(Elem("manifest:file-entry",{"manifest:full-path":xcu,"manifest:media-type":"application/vnd.sun.star.configuration-data"}))
-        
-#         if os.path.exists("Addons.xcu"):
-#             rt.append(Elem("manifest:file-entry",{"manifest:full-path":"Addons.xcu","manifest:media-type":"application/vnd.sun.star.configuration-data"}))
         if os.path.exists(unordb_file):
             rt.append(Elem("manifest:file-entry",{"manifest:full-path":unordb_file,"manifest:media-type":"application/vnd.sun.star.configuration-data"}))
         if os.path.exists(component_file):
@@ -45,7 +42,7 @@ def main():
     component_file = BASE_NAME + ".components"  # .componentsファイル名の作成。
     unordb_file = BASE_NAME + ".uno.rdb"  # rdbファイル名の取得。
     os.chdir(src_path)  # srcフォルダに移動。  
-#     createComponentsFile(component_file)  # .componentファイルの作成。
+    createComponentsFile(component_file)  # .componentファイルの作成。
     createManifestFile(component_file,unordb_file)  # manifext.xmlファイルの作成
 if __name__ == "__main__":
     sys.exit(main())    
