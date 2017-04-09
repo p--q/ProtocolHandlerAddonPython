@@ -5,6 +5,7 @@ import sys
 import xml.etree.ElementTree as ET
 from step3createXCUs import Elem
 from step1settings import BASE_NAME,LST,createBK,src_path
+import glob
 def createComponentNode(dic):  # Python UNO Component Fileの登録。
     nd = Elem("component",{"loader":"com.sun.star.loader.Python","uri":dic["PYTHON_UNO_Component"]})
     nd.append(Elem("implementation",{"name":dic["IMPLE_NAME"]}))
@@ -28,12 +29,15 @@ def createManifestFile(component_file,unordb_file):  # manifext.xmlファイル�
         createBK(mani)  # 既存のファイルを拡張子bkでバックアップ。  
     with open(mani,"w",encoding="utf-8") as fp:
         rt = Elem("manifest:manifest",{"xmlns:manifest":"http://openoffice.org/2001/manifest"})
-        if os.path.exists("Addons.xcu"):
-            rt.append(Elem("manifest:file-entry",{"manifest:full-path":"Addons.xcu","manifest:media-type":"application/vnd.sun.star.configuration-data"}))
-        if os.path.exists(component_file):
-            rt.append(Elem("manifest:file-entry",{"manifest:full-path":component_file,"manifest:media-type":"application/vnd.sun.star.configuration-data"}))
+        for xcu in glob.iglob("*.xcu"):
+            rt.append(Elem("manifest:file-entry",{"manifest:full-path":xcu,"manifest:media-type":"application/vnd.sun.star.configuration-data"}))
+        
+#         if os.path.exists("Addons.xcu"):
+#             rt.append(Elem("manifest:file-entry",{"manifest:full-path":"Addons.xcu","manifest:media-type":"application/vnd.sun.star.configuration-data"}))
         if os.path.exists(unordb_file):
-            rt.append(Elem("manifest:file-entry",{"manifest:full-path":unordb_file,"manifest:media-type":"application/vnd.sun.star.uno-components"}))
+            rt.append(Elem("manifest:file-entry",{"manifest:full-path":unordb_file,"manifest:media-type":"application/vnd.sun.star.configuration-data"}))
+        if os.path.exists(component_file):
+            rt.append(Elem("manifest:file-entry",{"manifest:full-path":component_file,"manifest:media-type":"application/vnd.sun.star.uno-components"}))
         tree = ET.ElementTree(rt)  # 根要素からxml.etree.ElementTree.ElementTreeオブジェクトにする。
         tree.write(fp.name,"utf-8",True)  # xml_declarationを有効にしてutf-8でファイルに出力する。   
         print("manifest.xml file has been created.")        
@@ -41,7 +45,7 @@ def main():
     component_file = BASE_NAME + ".components"  # .componentsファイル名の作成。
     unordb_file = BASE_NAME + ".uno.rdb"  # rdbファイル名の取得。
     os.chdir(src_path)  # srcフォルダに移動。  
-    createComponentsFile(component_file)  # .componentファイルの作成。
+#     createComponentsFile(component_file)  # .componentファイルの作成。
     createManifestFile(component_file,unordb_file)  # manifext.xmlファイルの作成
 if __name__ == "__main__":
     sys.exit(main())    
