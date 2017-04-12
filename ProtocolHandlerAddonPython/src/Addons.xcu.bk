@@ -50,7 +50,7 @@
 						<prop
 							oor:name="Title"
 							oor:type="xs:string">
-							<value xml:lang="en-US">%origin%</value>
+							<value xml:lang="en-US">Add-On Function 2</value>
 						</prop>
 						<prop
 							oor:name="Target"
