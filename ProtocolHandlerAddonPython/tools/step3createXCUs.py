@@ -134,12 +134,24 @@ class Images(MenuItem):
         super().__init__("node",{'oor:name':"Images"}) 
         name = "com.sun.star.comp.framework.addon.image1"  # ノードを区別するためだけの名前。
         url = dic["HANDLED_PROTOCOL"] + ":Function1"  # アイコンを表示させるコマンドURL
+#         dic_image = {
+#             "ImageSmall":"",
+#             "ImageBig":"",
+#             "ImageSmallHC":"",
+#             "ImageBigHC":""
+#         }
         dic_image = {
-            "ImageSmall":"%origin%/icons/image1ImageSmall.png",
-            "ImageBig":"%origin%/icons/image1ImageBig.png",
-            "ImageSmallHC":"%origin%/icons/image1ImageSmallHC.png",
-            "ImageBigHC":""
+            "ImageSmallURL":"%origin%/icons/image1ImageSmall.png",
+            "ImageBigURL":"%origin%/icons/image1ImageBig.png",
+            "ImageSmallHCURL":"%origin%/icons/image1ImageSmallHC.png",
+            "ImageBigHCURL":""
             }
+#         dic_image = {18ji
+#             "ImageSmall":"%origin%/icons/image1ImageSmall.bmp",
+#             "ImageBig":"%origin%/icons/image1ImageBig.bmp",
+#             "ImageSmallHC":"%origin%/icons/image1ImageSmallHC.bmp",
+#             "ImageBigHC":""
+#             }
         self.append(self.userDefinedImages(name,url,dic_image))
         name = "com.sun.star.comp.framework.addon.image2"  # ノードを区別するためだけの名前。
         url = "org.openoffice.Office.addon.example:Help"  # アイコンを表示させるコマンドURL
@@ -149,6 +161,12 @@ class Images(MenuItem):
             "ImageSmallHC":"424d36030000000000003600000028000000100000001000000001001800000000000003000000000000000000000000000000000000ff00ffff00ffff00ffff00fff0eeee6c5f602512133c2b2c2b1719594a4bdcd8d8ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff5443453a2525d0c5bdffffffffffffffffffe6e7e8493c3c5e514eb7b1b0ff00ffff00ffff00ffff00ffff00ff5c4a4dc0bbbcffffffffffffffffffffffffffffffffffffffffffd0d0cd584a4dc5bbb8ff00ffff00ffff00ffddd9d9514449ffffffffffffffffffffffff251317251317fffffffffffffffffffffffffffffbd3cfcfff00ffff00ffd9cdc5e0d9daffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff402d30ff00ffefeae6e9e0daffffffffffffffffffffffffffffff251317251317ffffffffffffffffffffffffffffff726361b1aaaad8cbc2ffffffffffffffffffffffffffffffffffff251317251317ffffffffffffffffffffffffffffffffffff332124d7cbc2fffffeffffffffffffffffffffffffffffff251317251317000000ffffffffffffffffffffffffffffff2b1a1dd8cdc4ffffffffffffffffffffffffffffffffffffffffff251317251317ffffffffffffffffffffffffffffff312125d5c8beffffffffffffffffffffffffffffffffffffffffffffffff251317251317ffffffffffffffffffffffff251317d9cdc5feffffffffffffffffffffff000000000000ffffffffffff251317251317ffffffffffffffffffffffff3f3033f5f2f0ded6d1ffffffffffffffffff000000251317251317251317251317000000ffffffffffffffffffb28d89c7c6c6ff00ffcbb6aaffffffffffffffffffffffff000000251317251317000000ffffffffffffffffffffffffb99e9bff00ffff00ffdccbc3e0d6cef2f2f2fffffffffffffffffffffffffffffffffffffffffffffefaffffffe2d4c8f2efeeff00ffff00ffff00fff0ebe6dfd0c9dbcac2f8f7f4fffffffffffffffffffdf8f2e3d9d1cfbfb4ebe3ddff00ffff00ffff00ffff00ffff00ffff00ffff00fffafaf9e1d6ced5c2b9d9c9c2d5c6beddcfc8f4f0efff00ffff00ffff00ffff00ffff00ff",
             "ImageBigHC":""
             }
+#         dic_image = {
+#             "ImageSmall":"",
+#             "ImageBig":"",
+#             "ImageSmallHC":"",
+#             "ImageBigHC":""
+#             }
         self.append(self.userDefinedImages(name,url,dic_image))
     def userDefinedImages(self,name,url,dic_image):  
         '''
@@ -167,12 +185,18 @@ class Images(MenuItem):
         nd.append(Elem("prop",{"oor:name":"URL"}))
         nd[0].append(Elem("value",text=url))
         nd.append(Elem("node",{"oor:name":"UserDefinedImages"}))
-        ORDER = "ImageSmall","ImageBig","ImageSmallHC","ImageBigHC","ImageSmallURL","ImageBigURL","ImageSmallHCURL","ImageBigHCURL"
+        ORDER = "ImageSmall","ImageBig","ImageSmallHC","ImageBigHC"
         for key in ORDER:
             if key in dic_image:
                 snd = Elem("prop",{"oor:name":key,"oor:type":"xs:hexBinary"})
                 snd.append(Elem("value",text=dic_image[key]))
                 nd[1].append(snd)
+        ORDER = "ImageSmallURL","ImageBigURL"  # "ImageSmallHC","ImageBigHC"があるとなぜか画像が表示されない。
+        for key in ORDER:
+            if key in dic_image:
+                snd = Elem("prop",{"oor:name":key,"oor:type":"xs:string"})
+                snd.append(Elem("value",text=dic_image[key]))
+                nd[1].append(snd)        
         return nd
 class OfficeHelp(MenuItem):   
     '''

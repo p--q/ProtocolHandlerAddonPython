@@ -1,4 +1,4 @@
-#!/opt/libreoffice5.2/program/python
+#!/home/pq/anaconda3/bin/python
 # -*- coding: utf-8 -*-
 import sys
 import os
