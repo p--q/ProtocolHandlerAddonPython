@@ -22,8 +22,9 @@ def main():
     comps = glob.glob("*.components")  # .componentsファイルを取得。 
     pys = glob.glob("*.py")  # Python UNO Componentファイルを取得。 
     xcus = glob.glob("*.xcu")  # xcuファイルを取得。
+    icons = glob.glob(os.path.join("icons","*.png"))
     lst_files = list()
-    for lst in mani,rdbs,comps,pys,xcus:  # oxtファイルにいれるファイルリストを取得。
+    for lst in mani,rdbs,comps,pys,xcus,icons:  # oxtファイルにいれるファイルリストを取得。
         if lst:
             lst_files.extend(lst)
     args = ["zip",oxt]
