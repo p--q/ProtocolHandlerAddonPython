@@ -15,5 +15,6 @@ if oxt:
     subprocess.run(args) 
     subprocess.run([unopkg,"gui"])
     print("If the error message is not, " + oxt_path + " deployment to " + os.path.basename(uno_path) + " has been successful.")
+    print("Restarting the OS may be necessary depending on the error.")
 else:
     print("There is no oxt file.")
